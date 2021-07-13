@@ -1,10 +1,10 @@
-import { Request, Response } from 'express'
+import { Request, RequestHandler } from 'express'
 import { promises as fs } from 'fs'
 import path from 'path'
 
 const parsePath = (req: Request): string => path.join(__dirname, '../public', req.url || '')
 
-export const read = async (req: Request, res: Response) => {
+export const read: RequestHandler = async (req, res) => {
   try {
     const data = await fs.readFile(parsePath(req), 'utf-8')
     res.status(200).type('application/json').end(data)
@@ -14,7 +14,7 @@ export const read = async (req: Request, res: Response) => {
   }
 }
 
-export const write = async (req: Request, res: Response) => {
+export const write: RequestHandler = async (req, res) => {
   let data: string = ''
   req.on('data', chunk => data += chunk)
   req.on('end', async () => {
@@ -28,7 +28,7 @@ export const write = async (req: Request, res: Response) => {
   })
 }
 
-export const update = async (req: Request, res: Response) => {
+export const update: RequestHandler = async (req, res) => {
   let data: string = ''
   req.on('data', chunk => data += chunk)
   req.on('end', async () => {
@@ -45,7 +45,7 @@ export const update = async (req: Request, res: Response) => {
   })
 }
 
-export const remove = async (req: Request, res: Response) => {
+export const remove: RequestHandler = async (req, res) => {
   try {
     await fs.unlink(parsePath(req))
     res.status(200).type('text/plain').end('File deleted')
