@@ -1,9 +1,11 @@
 import express, { Express } from 'express'
+import router from './router'
+
+const PORT: string = process.env.PORT || '3000'
 
 const app: Express = express()
+app.use(router)
 
-app.get('/', (req, res) => {
-
+app.listen(PORT, () => {
+  console.log(`Server started at port ${PORT}`)
 })
-
-app.listen(3000)
